@@ -1,0 +1,109 @@
+using NUnit.Framework;
+using NUnitLite;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+
+public class Solution
+{
+    static int Main(string[] args)
+    {
+        // Runs all unit tests
+        return new AutoRun(Assembly.GetCallingAssembly()).Execute(new String[] {"--labels=All"});
+    }
+    
+		// ----------------- TESTS
+    [TestFixture]
+    public class IntegrationTests
+    {
+        [Test]
+        public void SampleTest()
+        {
+          var variable = null;new Database();
+          
+            BusinessService service = new BusinessService(variable);
+            
+            int? domainValue =
+                service.RetrieveEntityWithBusinessLogicApplied(0);
+            
+            Assert.AreEqual(null, domainValue);
+          Assert.Throws<Exception>.
+        }
+        
+    }
+    
+    //-----------------* BUSINESS LOGIC
+    public class BusinessService
+    {
+        private IDatabase database;
+        
+        public BusinessService(IDatabase database)
+        {
+            //database = new Database();
+          this.database = database;
+        }
+      
+      //c# 2?   reference : value
+      // int : value != null
+      // int? : reference # , null
+      
+        public int? RetrieveEntityWithBusinessLogicApplied(int entityId)
+        {
+            int? entity = database.GetEntityById(entityId);
+            
+            if (entity % 3 == 0) //1
+            {
+                return (int)entity * 2;
+            }
+            else if (entity % 5 == 0)//2
+            {
+                return (int)entity * 3;
+            }
+            else//3
+            {
+                return entity;
+            }
+        }
+    }
+  
+    
+
+    //-----------------* DEPENDENCIES
+    public interface IDatabase
+    {
+        public int? GetEntityById(int entityId);
+    }
+
+    public class Database : IDatabase
+    {
+        // Static "database" whose values remain in memory
+        private static Dictionary<int,int> database;
+        
+        public Database()
+        {
+            if (database == null)
+            {
+                // Create in memory database
+                database = new Dictionary<int,int>();
+            }
+        }
+        
+        public void SaveEntity(int entityId, int entity)
+        {
+            database[entityId] = entity;
+        }
+        
+        public int? GetEntityById(int entityId)
+        {
+            if (database.ContainsKey(entityId))
+            {
+                return database[entityId];
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+}
