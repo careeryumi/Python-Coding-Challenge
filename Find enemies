@@ -1,0 +1,56 @@
+def ClosestEnemyII(strArr):
+
+  # Logic: find 2 enemies (number 2) before number 1 and after number 1 and compare distance to number 1
+
+  #check enemies befor and after of 1 and compare the distance
+  enemyBeforeRow = 0 # check row of enemy 1
+  enemyAfterRow = 0 # check row of enemy 2
+  enemyBeforeIndex = 0 # check order of enemy 1 in a row
+  enemyAfterIndex= 0 # check order of enemy 2 in a row
+  foundOne = 0 # check if we found 1 or not
+  foundOneLocationOfRow = 0 # check the row of 1
+  foundOneLocationOfIndex = 0 # check the index of row
+  LengthOfEachElement = len(strArr[0])
+
+  currentRowCount = 0
+
+  for eachStringElement in strArr:
+
+    currentRowCount = currentRowCount + 1
+
+    for index, eachNumberElement in enumerate(eachStringElement, start=1):
+
+      if eachNumberElement == '1':
+        foundOne = 1 # we found number 1
+        foundOneLocationOfRow = currentRowCount
+        foundOneLocationOfIndex = index
+
+        # print('foundOneLocationOfRow', foundOneLocationOfRow)
+        # print('foundOneLocationOfIndex', foundOneLocationOfIndex)
+
+      if foundOne == '0' and eachNumberElement == '2':
+        enemyBeforeRow = currentRowCount # we found first enemy
+        enemyBeforeIndex = index
+
+        # print('enemyBeforeRow', enemyBeforeRow)
+        # print('enemyBeforeIndex', enemyBeforeIndex)
+
+      if foundOne == '1' and eachNumberElement == '2':
+        enemyAfterRow = currentRowCount # we found second enemy
+        enemyAfterIndex = index
+
+
+      if enemyBeforeRow == '0' and enemyAfterRow == '0':
+        return 0 # there was no enemy
+
+  distanceList =[]
+  distanceBetweenEnemy1And1 = abs(enemyBeforeRow - foundOneLocationOfRow) + abs(foundOneLocationOfIndex - enemyBeforeIndex) - LengthOfEachElement + 1
+  distanceBetweenEnemy2And1 = abs(enemyAfterRow - foundOneLocationOfRow) + abs(foundOneLocationOfIndex - enemyAfterIndex) -LengthOfEachElement + 1
+  
+  if distanceBetweenEnemy1And1 > distanceBetweenEnemy2And1:
+    return distanceBetweenEnemy2And1
+  else:
+    return distanceBetweenEnemy1And1
+
+# keep this function call here 
+print(ClosestEnemyII(input()))
